@@ -1,0 +1,78 @@
+@font-face {
+  font-family: "PressStart2P";
+  src: url("PressStart2P-Regular.ttf") format("truetype"),
+}
+
+@first_color: rgb(5, 59, 80);
+@second_color: rgb(23, 107, 135);
+@third_color: rgb(100, 204, 197);
+@fourth_color: rgb(238, 238, 238);
+
+body {
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+  font-family: 'PressStart2P', Arial, sans-serif;
+  font-size: 18px;
+}
+
+.main {
+  height: 100vh;
+  height: 100dvh;
+  width: 100vw;
+
+  background-color: @fourth_color;
+
+  .title {
+    font-size: 30px;
+
+    padding: 60px;
+
+    display: flex;
+    justify-content: center;
+  }
+
+  .dogs {
+    display: flex;
+    flex-direction: column;
+
+    width: 1000px;
+    margin: 0 auto;
+
+    .dog {
+      margin: 10px;
+      padding: 10px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+
+      border: 2px solid @second_color;
+      border-radius: 10px;
+      box-shadow: 4px 4px @second_color;
+      color: @first_color;
+
+      .score {
+        color: @third_color;
+      }
+
+      .button {
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+
+        border: 2px solid @third_color;
+        border-radius: 3px;
+        box-shadow: 2px 2px @third_color;
+        color: @third_color;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        margin-right: 10px;
+      }
+    }
+  }
+}

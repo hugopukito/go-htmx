@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>HTMX Go</title>
+    <link rel="stylesheet/less" type="text/css" href="/template/style.less"/>
+    <script src="/template/less.js"></script>
+    <script src="/template/htmx.js"></script>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta charset="utf-8"/>
+  </head>
+  <body>
+    <div class="main">
+      <div class="title">
+        HTMX Go
+      </div>
+      <div class="dogs">
+        {{ range .Dogs }}
+
+        <div class="dog">
+          <div class="button" hx-get='/increment-dog' hx-target='next #score' hx-vals='{"ID": "{{ .ID }}"}'>
+            +
+          </div>
+          <div class="name"> {{ .Name }} </div>
+          <div id="score" class="score"> {{ .Score }} </div>
+          <div class="date"> {{ .Date }} </div>
+        </div>
+        
+        {{ end }}
+      </div>
+    </div>
+  </body>
+</html>

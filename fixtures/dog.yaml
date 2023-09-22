@@ -1,0 +1,5 @@
+Dog:
+  dog{1..50}:
+    name: "{random{word{2}}}"
+    score: 0
+    dateCreation: "{new{}}"
