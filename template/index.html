@@ -17,12 +17,11 @@
         {{ range .Dogs }}
 
         <div class="dog">
-          <div class="button" hx-get='/increment-dog' hx-target='next #score' hx-vals='{"ID": "{{ .ID }}"}'>
+          <div class="button" hx-put='/increment-dog/{{ .ID }}' hx-target='next #score' hx-vals='{"ID": "{{ .ID }}"}'>
             +
           </div>
           <div class="name"> {{ .Name }} </div>
           <div id="score" class="score"> {{ .Score }} </div>
-          <div class="date"> {{ .Date }} </div>
         </div>
         
         {{ end }}

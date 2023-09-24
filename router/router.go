@@ -4,16 +4,20 @@ import (
 	"htmx/service"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 func InitRouter() {
 
-	http.HandleFunc("/", service.GetHome)
-	http.HandleFunc("/increment-dog", service.IncrementDog)
+	r := mux.NewRouter()
+
+	r.HandleFunc("/", service.GetHome)
+	r.HandleFunc("/increment-dog/{id}", service.IncrementDog)
 
 	fs := http.FileServer(http.Dir("template"))
-	http.Handle("/template/", http.StripPrefix("/template/", fs))
+	r.PathPrefix("/template/").Handler(http.StripPrefix("/template/", fs))
 
 	log.Println("running server on port 8080...")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":8080", r))
 }

@@ -6,6 +6,10 @@ import (
 	"htmx/entity"
 	"htmx/repository"
 	"net/http"
+	"strconv"
+
+	"github.com/google/uuid"
+	"github.com/gorilla/mux"
 )
 
 func GetHome(w http.ResponseWriter, r *http.Request) {
@@ -16,25 +20,40 @@ func GetHome(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 	}
 
-	var dogTmpls []entity.DogTmpl
+	// var dogTmpls []entity.DogTmpl
 
-	for _, dog := range dogs {
-		dogTmpl := entity.DogTmpl{
-			Dog:  dog,
-			Date: dog.DateCreation.Format("15:04:05"),
-		}
-		dogTmpls = append(dogTmpls, dogTmpl)
-	}
+	// for _, dog := range dogs {
+	// 	dogTmpl := entity.DogTmpl{
+	// 		Dog:  dog,
+	// 		Date: dog.DateCreation.Format("15:04:05"),
+	// 	}
+	// 	dogTmpls = append(dogTmpls, dogTmpl)
+	// }
 
-	dogsHtmx := map[string][]entity.DogTmpl{
-		"Dogs": dogTmpls,
+	dogsHtmx := map[string][]entity.Dog{
+		"Dogs": dogs,
 	}
 
 	tmpl.Execute(w, dogsHtmx)
 }
 
 func IncrementDog(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(r.URL.Query())
-	tmpl, _ := template.New("t").Parse("1")
+	id := mux.Vars(r)["id"]
+
+	uuid, err := uuid.Parse(id)
+	if err != nil {
+		// will remove score from dom, need to do nothing
+		fmt.Println(err)
+		return
+	}
+
+	score, err := repository.IncrementScore(uuid)
+	if err != nil {
+		// will remove score from dom, need to do nothing
+		fmt.Println(err)
+		return
+	}
+
+	tmpl, _ := template.New("t").Parse(strconv.Itoa(score))
 	tmpl.Execute(w, nil)
 }
