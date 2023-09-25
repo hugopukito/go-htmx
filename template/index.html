@@ -16,17 +16,17 @@
       <div class="dogs">
         {{ range .Dogs }}
 
-        <div class="dog">
-          <div class="button" 
-          hx-put='/increment-dog/{{ .ID }}' 
-          hx-target='next #score' >
-            <div>+</div>
-            <div id="loading" class="hidden">loading</div>
+          <div class="dog">
+            <div class="button" hx-put='/increment-dog/{{ .ID }}' hx-target='next .score' 
+              hx-on::before-request="this.querySelector('.loading').style.display='inline'; this.querySelector('.initial').style.display='none'"
+              hx-on::after-request="this.querySelector('.loading').style.display='none'; this.querySelector('.initial').style.display='inline'"> 
+              <div class="initial">+</div>
+              <div class="loading" style="display: none;">.</div>
+            </div>
+            <div class="name"> {{ .Name }} </div>
+            <div class="score"> {{ .Score }} </div>
           </div>
-          <div class="name"> {{ .Name }} </div>
-          <div id="score" class="score"> {{ .Score }} </div>
-        </div>
-        
+
         {{ end }}
       </div>
     </div>
