@@ -16,10 +16,6 @@ body {
   font-size: 18px;
 
   background-color: @fourth_color;
-
-  [data-loading] {
-    display: none;
-  }
 }
 
 .main {
@@ -76,6 +72,10 @@ body {
         align-items: center;
 
         margin-right: 10px;
+
+        .hidden {
+          display: none;
+        }
       }
     }
   }
