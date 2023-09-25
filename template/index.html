@@ -5,6 +5,7 @@
     <link rel="stylesheet/less" type="text/css" href="/template/style.less"/>
     <script src="/template/less.js"></script>
     <script src="/template/htmx.js"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/loading-states.js"></script>
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta charset="utf-8"/>
   </head>
@@ -17,8 +18,13 @@
         {{ range .Dogs }}
 
         <div class="dog">
-          <div class="button" hx-put='/increment-dog/{{ .ID }}' hx-target='next #score' hx-vals='{"ID": "{{ .ID }}"}'>
-            +
+          <div class="button" 
+          hx-put='/increment-dog/{{ .ID }}' 
+          hx-target='next #score' 
+          data-loading-target="#loading" 
+          hx-ext="loading-states">
+            <div data-loading-disable>+</div>
+            <div id="loading" data-loading>loading</div>
           </div>
           <div class="name"> {{ .Name }} </div>
           <div id="score" class="score"> {{ .Score }} </div>

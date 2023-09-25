@@ -55,7 +55,7 @@ func IncrementDog(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	time.Sleep(2 * 1000)
+	time.Sleep(1 * time.Second)
 
 	tmpl, _ := template.New("t").Parse(strconv.Itoa(score))
 	tmpl.Execute(w, nil)
