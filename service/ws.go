@@ -29,8 +29,8 @@ func HandleWsConnection(w http.ResponseWriter, r *http.Request) {
 	for {
 		var buff map[string]any
 		err := ws.ReadJSON(&buff)
-		if _, ok := buff["test"]; ok {
-			bdcast <- "<div id='messageContent' hx-swap-oob='true'>Message: </div>"
+		if msg, ok := buff["test"]; ok {
+			bdcast <- "<div id='messageContent' hx-swap-oob='true'>Message: " + msg.(string) + "</div>"
 		}
 
 		if err != nil {
