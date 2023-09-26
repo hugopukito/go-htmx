@@ -20,8 +20,12 @@
             <div class="button" hx-put='/increment-dog/{{ .ID }}' hx-target='next .score' 
               hx-on::before-request="this.querySelector('.loading').style.display='inline'; this.querySelector('.initial').style.display='none'"
               hx-on::after-request="this.querySelector('.loading').style.display='none'; this.querySelector('.initial').style.display='inline'"> 
-              <div class="initial">+</div>
-              <div class="loading" style="display: none;">.</div>
+              <div class="initial">
+                +
+              </div>
+              <div class="loading" style="display: none;">
+                <div class="loader"></div>
+              </div>
             </div>
             <div class="name"> {{ .Name }} </div>
             <div class="score"> {{ .Score }} </div>

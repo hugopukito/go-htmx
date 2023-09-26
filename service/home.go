@@ -7,7 +7,6 @@ import (
 	"htmx/repository"
 	"net/http"
 	"strconv"
-	"time"
 
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
@@ -54,8 +53,6 @@ func IncrementDog(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 		return
 	}
-
-	time.Sleep(1 * time.Second)
 
 	tmpl, _ := template.New("t").Parse(strconv.Itoa(score))
 	tmpl.Execute(w, nil)

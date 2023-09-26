@@ -32,6 +32,8 @@ body {
     justify-content: center;
   }
 
+
+
   .dogs {
     display: flex;
     flex-direction: column;
@@ -77,6 +79,46 @@ body {
           display: none;
         }
       }
+    }
+  }
+
+  .loader, .loader:after {
+    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+  }
+  .loader {
+    font-size: 3px;
+    position: relative;
+    text-indent: -9999em;
+    border-top: 1.1em solid @third_color;
+    border-right: 1.1em solid @third_color;
+    border-bottom: 1.1em solid @third_color;
+    border-left: 1.1em solid @first_color;
+    -webkit-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-animation: load8 1.1s infinite linear;
+    animation: load8 1.1s infinite linear;
+  }
+  @-webkit-keyframes load8 {
+    0% {
+      -webkit-transform: rotate(0deg);
+      transform: rotate(0deg);
+    }
+    100% {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes load8 {
+    0% {
+      -webkit-transform: rotate(0deg);
+      transform: rotate(0deg);
+    }
+    100% {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg);
     }
   }
 }
