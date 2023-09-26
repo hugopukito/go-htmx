@@ -14,6 +14,15 @@
       <div class="title">
         HTMX Go
       </div>
+      <div class="ws" hx-ext="ws" ws-connect="/ws">
+        <div class="sender" hx-vals='{"test": "test"}' ws-send>
+          sender
+        </div>
+        <div id='messageContent' hx-swap-oob="true">
+          yes
+        </div>
+        </div>
+      </div>
       <div class="dogs">
         {{ range .Dogs }}
 

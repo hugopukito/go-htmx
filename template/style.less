@@ -14,25 +14,48 @@ body {
   scroll-behavior: smooth;
   font-family: 'PressStart2P', Arial, sans-serif;
   font-size: 18px;
+  overflow-x: hidden;
 
   background-color: @fourth_color;
 }
 
 .main {
-  height: 100vh;
-  height: 100dvh;
-  width: 100vw;
-
   .title {
     font-size: 30px;
-
-    padding: 60px;
-
+    height: 150px;
+    align-items: center;
     display: flex;
     justify-content: center;
   }
 
+  .ws {
+    height: 80vh;
+    width: 90vw;
+    margin: 0 auto;
+    margin-bottom: 60px;
 
+    border: 2px solid @first_color;
+    border-radius: 10px;
+    box-shadow: 4px 4px @first_color;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+
+    .sender {
+      cursor: pointer;
+      height: fit-content;
+      margin-top: 40px;
+
+      border: 2px solid @second_color;
+      border-radius: 3px;
+      box-shadow: 2px 2px @second_color;
+      color: @second_color;
+
+      padding: 10px;
+    }
+  }
 
   .dogs {
     display: flex;
