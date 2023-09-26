@@ -10,6 +10,7 @@ require (
 
 require (
 	github.com/gorilla/mux v1.8.0
+	github.com/gorilla/websocket v1.5.0
 	golang.org/x/crypto v0.12.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

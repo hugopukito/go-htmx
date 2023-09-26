@@ -14,6 +14,7 @@ func InitRouter() {
 
 	r.HandleFunc("/", service.GetHome)
 	r.HandleFunc("/increment-dog/{id}", service.IncrementDog)
+	r.HandleFunc("/ws", service.HandleWsConnection)
 
 	fs := http.FileServer(http.Dir("template"))
 	r.PathPrefix("/template/").Handler(http.StripPrefix("/template/", fs))
