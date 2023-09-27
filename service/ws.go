@@ -1,9 +1,12 @@
 package service
 
 import (
+	"fmt"
 	"io"
 	"log"
+	"math/rand"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/websocket"
 )
@@ -26,11 +29,14 @@ func HandleWsConnection(w http.ResponseWriter, r *http.Request) {
 
 	clients[ws] = struct{}{}
 
+	rand := rand.New(rand.NewSource(rand.Int63()))
+
 	for {
 		var buff map[string]any
 		err := ws.ReadJSON(&buff)
-		if msg, ok := buff["test"]; ok {
-			bdcast <- "<div id='messageContent' hx-swap-oob='true'>Message: " + msg.(string) + "</div>"
+		if _, ok := buff["test"]; ok {
+			//bdcast <- `<div hx-swap-oob='innerHTML:#msg'>` + msg.(string) + `</div>`
+			bdcast <- `<div hx-swap-oob='innerHTML:#msg'>` + strconv.Itoa(rand.Int()) + `</div>`
 		}
 
 		if err != nil {
@@ -54,7 +60,11 @@ func messageClients(msg string) {
 }
 
 func messageClient(client *websocket.Conn, msg string) {
-	err := client.WriteJSON(msg)
+	err := client.WriteMessage(websocket.TextMessage, []byte(msg))
+	if err != nil {
+		fmt.Println("Error writing message:", err)
+		return
+	}
 
 	if err != nil && unsafeError(err) {
 		log.Printf("error: %v", err)
