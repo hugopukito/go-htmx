@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"math/rand"
 	"net/http"
 	"strconv"
 
@@ -29,14 +28,16 @@ func HandleWsConnection(w http.ResponseWriter, r *http.Request) {
 
 	clients[ws] = struct{}{}
 
-	rand := rand.New(rand.NewSource(rand.Int63()))
+	// init board game
+	bdcast <- initBoard(3)
 
 	for {
 		var buff map[string]any
 		err := ws.ReadJSON(&buff)
-		if _, ok := buff["test"]; ok {
-			//bdcast <- `<div hx-swap-oob='innerHTML:#msg'>` + msg.(string) + `</div>`
-			bdcast <- `<div hx-swap-oob='innerHTML:#msg'>` + strconv.Itoa(rand.Int()) + `</div>`
+		if cellID, ok := buff["cellID"]; ok {
+			htmlID := `id="boardCell_` + cellID.(string) + `"`
+			vals := ` hx-vals='{"cellID": "` + cellID.(string) + `"}'`
+			bdcast <- `<div class="cell colored" ` + htmlID + vals + ` hx-swap-oob='outerHTML:#boardCell_` + cellID.(string) + `' ws-send>x</div>`
 		}
 
 		if err != nil {
@@ -76,6 +77,22 @@ func messageClient(client *websocket.Conn, msg string) {
 // If a message is sent while a client is closing, ignore the error
 func unsafeError(err error) bool {
 	return !websocket.IsCloseError(err, websocket.CloseGoingAway) && err != io.EOF
+}
+
+func initBoard(size int) string {
+	htmlString := "<div hx-swap-oob='innerHTML:#board'>"
+	for i := 0; i < size; i++ {
+		htmlString += "<div class='line'>"
+		for y := 0; y < size; y++ {
+			id := strconv.Itoa(i) + "_" + strconv.Itoa(y)
+			htmlID := `id="boardCell_` + id + `"`
+			vals := ` hx-vals='{"cellID": "` + id + `"}'`
+			htmlString += `<div class="cell" ` + htmlID + vals + ` ws-send></div>`
+		}
+		htmlString += "</div>"
+	}
+	htmlString += "</div>"
+	return htmlString
 }
 
 func init() {

@@ -39,21 +39,23 @@ body {
     box-shadow: 4px 4px @first_color;
 
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
     gap: 50px;
 
-    .sender {
-      cursor: pointer;
-      height: fit-content;
-      margin-top: 40px;
-
-      border: 2px solid @second_color;
-      border-radius: 3px;
-      box-shadow: 2px 2px @second_color;
-      color: @second_color;
-
-      padding: 10px;
+    .board {
+      border: 1px solid @second_color;
+      .line {
+        display: flex;
+        .cell {
+          border: 1px solid @second_color;
+          width: 20px;
+          height: 20px;
+          &.colored {
+            background-color: black;
+          }
+        }
+      }
     }
   }
 
