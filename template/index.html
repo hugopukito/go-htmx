@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>HTMX Go</title>
+    <title>HTMX Golang</title>
     <link rel="stylesheet/less" type="text/css" href="/template/style.less"/>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%2210 0 100 100%22><text y=%22.90em%22 font-size=%2290%22>🕹</text></svg>">
     <script src="https://cdn.jsdelivr.net/npm/less" ></script>
     <script src="https://unpkg.com/htmx.org@1.9.6" integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
@@ -12,9 +13,10 @@
   <body>
     <div class="main">
       <div class="title">
-        HTMX Go
+        HTMX Golang
       </div>
       <div class="ws" hx-ext="ws" ws-connect="/ws">
+        <div id="color_picker" class="color-picker"></div>
         <div id="board" class="board"></div>
       </div>
       <div class="dogs">

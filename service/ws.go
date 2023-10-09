@@ -16,7 +16,7 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
-var clients = make(map[*websocket.Conn]any)
+var clients = make(map[*websocket.Conn]string)
 var bdcast = make(chan string)
 
 func HandleWsConnection(w http.ResponseWriter, r *http.Request) {
@@ -26,18 +26,20 @@ func HandleWsConnection(w http.ResponseWriter, r *http.Request) {
 	}
 	defer ws.Close()
 
-	clients[ws] = struct{}{}
+	clients[ws] = "rgb(0,0,0)"
 
 	// init board game
-	bdcast <- initBoard(3)
+	bdcast <- initBoard(20)
+	bdcast <- initColorPicker()
 
 	for {
 		var buff map[string]any
 		err := ws.ReadJSON(&buff)
 		if cellID, ok := buff["cellID"]; ok {
-			htmlID := `id="boardCell_` + cellID.(string) + `"`
-			vals := ` hx-vals='{"cellID": "` + cellID.(string) + `"}'`
-			bdcast <- `<div class="cell colored" ` + htmlID + vals + ` hx-swap-oob='outerHTML:#boardCell_` + cellID.(string) + `' ws-send>x</div>`
+			setCellColor(cellID, clients[ws])
+		}
+		if colorPicker, ok := buff["colorPicker"]; ok {
+			setClientColor(ws, colorPicker)
 		}
 
 		if err != nil {
@@ -77,6 +79,32 @@ func messageClient(client *websocket.Conn, msg string) {
 // If a message is sent while a client is closing, ignore the error
 func unsafeError(err error) bool {
 	return !websocket.IsCloseError(err, websocket.CloseGoingAway) && err != io.EOF
+}
+
+func setClientColor(client *websocket.Conn, colorPicker any) {
+
+}
+
+func setCellColor(cellID any, rgbColor string) {
+	id, isString := cellID.(string)
+	if isString {
+		htmlID := `id="boardCell_` + id + `"`
+		vals := ` hx-vals='{"cellID": "` + id + `"}'`
+		color := ` style="background-color: ` + rgbColor + `;"`
+		bdcast <- `<div class="cell" ` + htmlID + vals + color + ` hx-swap-oob='outerHTML:#boardCell_` + cellID.(string) + `' ws-send></div>`
+	}
+}
+
+func initColorPicker() string {
+	htmlString := "<div id='color_picker' class='class-picker' hx-swap-oob='innerHTML:#color_picker'>"
+	htmlString += "<div id='color_pick_0' class='color-pick selected'>"
+	htmlString += "</div>"
+	for i := 0; i < 3; i++ {
+		htmlString += "<div id='color_pick_" + strconv.Itoa(i+1) + "' class='color-pick'>"
+		htmlString += "</div>"
+	}
+	htmlString += "</div>"
+	return htmlString
 }
 
 func initBoard(size int) string {

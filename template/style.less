@@ -39,9 +39,24 @@ body {
     box-shadow: 4px 4px @first_color;
 
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 50px;
+
+    .color-picker {
+      display: flex;
+      gap: 15px;
+      .color-pick {
+        width: 30px;
+        height: 30px;
+        border: 2px solid @first_color;
+        border-radius: 10px;
+        &.selected {
+          box-shadow: 2px 2px @first_color;
+        }
+      }
+    }
 
     .board {
       border: 1px solid @second_color;
@@ -51,9 +66,6 @@ body {
           border: 1px solid @second_color;
           width: 20px;
           height: 20px;
-          &.colored {
-            background-color: black;
-          }
         }
       }
     }
