@@ -17,7 +17,12 @@ var upgrader = websocket.Upgrader{
 }
 
 var clients = make(map[*websocket.Conn]string)
-var bdcast = make(chan string)
+var bdcastAll = make(chan string)
+var colors = []string{
+	"rgb(5, 59, 80)",
+	"rgb(23, 107, 135)",
+	"rgb(100, 204, 197)",
+}
 
 func HandleWsConnection(w http.ResponseWriter, r *http.Request) {
 	ws, err := upgrader.Upgrade(w, r, nil)
@@ -26,17 +31,17 @@ func HandleWsConnection(w http.ResponseWriter, r *http.Request) {
 	}
 	defer ws.Close()
 
-	clients[ws] = "rgb(0,0,0)"
+	clients[ws] = colors[0]
 
 	// init board game
-	bdcast <- initBoard(20)
-	bdcast <- initColorPicker()
+	bdcastAll <- initBoard(20)
+	bdcastAll <- initColorPicker(0)
 
 	for {
 		var buff map[string]any
 		err := ws.ReadJSON(&buff)
 		if cellID, ok := buff["cellID"]; ok {
-			setCellColor(cellID, clients[ws])
+			setCellColor(ws, cellID)
 		}
 		if colorPicker, ok := buff["colorPicker"]; ok {
 			setClientColor(ws, colorPicker)
@@ -51,7 +56,7 @@ func HandleWsConnection(w http.ResponseWriter, r *http.Request) {
 
 func handleMessages() {
 	for {
-		msg := <-bdcast
+		msg := <-bdcastAll
 		messageClients(msg)
 	}
 }
@@ -81,26 +86,37 @@ func unsafeError(err error) bool {
 	return !websocket.IsCloseError(err, websocket.CloseGoingAway) && err != io.EOF
 }
 
-func setClientColor(client *websocket.Conn, colorPicker any) {
-
-}
-
-func setCellColor(cellID any, rgbColor string) {
-	id, isString := cellID.(string)
-	if isString {
-		htmlID := `id="boardCell_` + id + `"`
-		vals := ` hx-vals='{"cellID": "` + id + `"}'`
-		color := ` style="background-color: ` + rgbColor + `;"`
-		bdcast <- `<div class="cell" ` + htmlID + vals + color + ` hx-swap-oob='outerHTML:#boardCell_` + cellID.(string) + `' ws-send></div>`
+func setClientColor(ws *websocket.Conn, colorPicker any) {
+	idString, ok := colorPicker.(string)
+	id, ok2 := strconv.Atoi(idString)
+	if ok && ok2 == nil {
+		clients[ws] = colors[id]
+		messageClient(ws, initColorPicker(id))
 	}
 }
 
-func initColorPicker() string {
-	htmlString := "<div id='color_picker' class='class-picker' hx-swap-oob='innerHTML:#color_picker'>"
-	htmlString += "<div id='color_pick_0' class='color-pick selected'>"
-	htmlString += "</div>"
-	for i := 0; i < 3; i++ {
-		htmlString += "<div id='color_pick_" + strconv.Itoa(i+1) + "' class='color-pick'>"
+func setCellColor(ws *websocket.Conn, cellID any) {
+	id, ok := cellID.(string)
+	if ok {
+		htmlID := `id="boardCell_` + id + `"`
+		vals := ` hx-vals='{"cellID": "` + id + `"}'`
+		color := ` style="background-color: ` + clients[ws] + `;"`
+		bdcastAll <- `<div class="cell" ` + htmlID + vals + color + ` hx-swap-oob='outerHTML:#boardCell_` + cellID.(string) + `' ws-send></div>`
+	}
+}
+
+func initColorPicker(targetID int) string {
+	htmlString := "<div id='color_picker' hx-swap-oob='innerHTML:#color_picker'>"
+	for i := 0; i < len(colors); i++ {
+		id := strconv.Itoa(i)
+		vals := ` hx-vals='{"colorPicker": "` + id + `"}'`
+		color := ` style="background-color: ` + colors[i]
+		if i == targetID {
+			color += `; border: 3px solid rgb(255, 75, 145);"`
+		} else {
+			color += `;"`
+		}
+		htmlString += "<div id='color_pick_" + id + "'" + vals + color + "' class='color-pick' ws-send>"
 		htmlString += "</div>"
 	}
 	htmlString += "</div>"

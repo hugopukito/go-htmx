@@ -16,7 +16,10 @@
         HTMX Golang
       </div>
       <div class="ws" hx-ext="ws" ws-connect="/ws">
-        <div id="color_picker" class="color-picker"></div>
+        <div class="color-picker-wrapper">
+          <div class="color-picker-title">Choose color</div>
+          <div id="color_picker" class="color-picker"></div>
+        </div>
         <div id="board" class="board"></div>
       </div>
       <div class="dogs">
