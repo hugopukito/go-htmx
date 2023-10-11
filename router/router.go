@@ -13,7 +13,7 @@ func InitRouter() {
 	r := mux.NewRouter()
 
 	r.HandleFunc("/", service.GetHome)
-	r.HandleFunc("/increment-dog/{id}", service.IncrementDog)
+	// r.HandleFunc("/increment-dog/{id}", service.IncrementDog)
 	r.HandleFunc("/ws", service.HandleWsConnection)
 
 	fs := http.FileServer(http.Dir("template"))

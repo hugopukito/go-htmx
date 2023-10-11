@@ -3,7 +3,6 @@ package service
 import (
 	"fmt"
 	"html/template"
-	"htmx/entity"
 	"htmx/repository"
 	"net/http"
 	"strconv"
@@ -15,10 +14,10 @@ import (
 func GetHome(w http.ResponseWriter, r *http.Request) {
 	tmpl := template.Must(template.ParseFiles("template/index.html"))
 
-	dogs, err := repository.FindDogs()
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-	}
+	// dogs, err := repository.FindDogs()
+	// if err != nil {
+	// 	w.WriteHeader(http.StatusBadRequest)
+	// }
 
 	// var dogTmpls []entity.DogTmpl
 
@@ -30,11 +29,11 @@ func GetHome(w http.ResponseWriter, r *http.Request) {
 	// 	dogTmpls = append(dogTmpls, dogTmpl)
 	// }
 
-	dogsHtmx := map[string][]entity.Dog{
-		"Dogs": dogs,
-	}
+	// dogsHtmx := map[string][]entity.Dog{
+	// 	"Dogs": dogs,
+	// }
 
-	tmpl.Execute(w, dogsHtmx)
+	tmpl.Execute(w, nil)
 }
 
 func IncrementDog(w http.ResponseWriter, r *http.Request) {

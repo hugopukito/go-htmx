@@ -1,0 +1,17 @@
+version: '3.9'
+services:
+  redis:
+    image: redis:6.0
+    ports:
+      - "6380:6379"
+    volumes:
+      - ./data/redis:/data
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis
+    entrypoint: [ "/app/wait-for.sh", "redis:6379", "--", "/app/main"]
