@@ -34,7 +34,7 @@ func HandleWsConnection(w http.ResponseWriter, r *http.Request) {
 	clients[ws] = colors[0]
 
 	// init board game
-	bdcastAll <- initBoard(20)
+	bdcastAll <- initBoard(100)
 	bdcastAll <- initColorPicker(0)
 
 	for {

@@ -14,7 +14,7 @@ body {
   scroll-behavior: smooth;
   font-family: 'PressStart2P', Arial, sans-serif;
   font-size: 18px;
-  overflow-x: hidden;
+  overflow: hidden;
 
   background-color: @white_color;
 }
@@ -31,25 +31,29 @@ body {
 
   .ws {
     width: 90vw;
+    height: 70vh;
     margin: 0 auto;
-    margin-bottom: 60px;
-    padding: 40px;
 
     border: 2px solid @first_color;
     border-radius: 10px;
     box-shadow: 4px 4px @first_color;
+    overflow-x: hidden;
 
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 70px;
+    gap: 40px;
 
     .color-picker-wrapper {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 30px;
+      height: fit-content;
+
+      border-bottom: 2px solid @first_color;
+      padding: 40px;
 
       .color-picker-title {
         color: @second_color;
@@ -70,6 +74,8 @@ body {
 
     .board {
       border: 1px solid @second_color;
+      overflow: hidden;
+      
       .line {
         display: flex;
         .cell {
